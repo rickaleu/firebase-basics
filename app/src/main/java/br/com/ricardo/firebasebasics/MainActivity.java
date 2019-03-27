@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewFirebase;
     private List<Pessoa> pessoaList;
 
+    private Pessoa pessoaSelecionada;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -75,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseCrudAdapter adapter = new FirebaseCrudAdapter(pessoaList);
                 recyclerViewFirebase.setAdapter(adapter);
 
+                adapter.setOnItemClickListener(new FirebaseCrudAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+
+                        pessoaSelecionada = pessoaList.get(position);
+                        editNome.setText(pessoaSelecionada.getNome());
+                        editEmail.setText(pessoaSelecionada.getEmail());
+                    }
+                });
+
             }
 
             @Override
@@ -117,6 +128,24 @@ public class MainActivity extends AppCompatActivity {
             databaseReference.child("Pessoa").child(p.getUid()).setValue(p);
 
             limpaCampos();
+        } else if(id == R.id.menu_atualiza){
+            Pessoa p = new Pessoa();
+            p.setUid(pessoaSelecionada.getUid());
+            p.setNome(editNome.getText().toString());
+            p.setEmail(editEmail.getText().toString());
+
+            databaseReference.child("Pessoa").child(p.getUid()).setValue(p);
+
+            limpaCampos();
+
+        } else if(id == R.id.menu_deleta){
+
+            Pessoa p = new Pessoa();
+            p.setUid(pessoaSelecionada.getUid());
+            databaseReference.child("Pessoa").child(p.getUid()).removeValue();
+
+            limpaCampos();
+
         }
 
         return true;

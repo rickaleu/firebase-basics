@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import br.com.ricardo.firebasebasics.Modelo.Pessoa;
@@ -16,6 +14,8 @@ import br.com.ricardo.firebasebasics.Modelo.Pessoa;
 public class FirebaseCrudAdapter extends RecyclerView.Adapter<FirebaseCrudAdapter.FirebaseCrudHolder> {
 
     private List<Pessoa> pessoaList;
+    private OnItemClickListener clickListener;
+
 
     public FirebaseCrudAdapter(List<Pessoa> pessoaList) {
         this.pessoaList = pessoaList;
@@ -61,6 +61,22 @@ public class FirebaseCrudAdapter extends RecyclerView.Adapter<FirebaseCrudAdapte
             textItemNome = (TextView) itemView.findViewById(R.id.text_item_firebase_nome);
             textItemEmail = (TextView) itemView.findViewById(R.id.text_item_firebase_email);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    clickListener.onItemClick(getAdapterPosition());
+                }
+            });
+
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        clickListener = listener;
     }
 }
