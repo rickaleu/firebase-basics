@@ -1,5 +1,6 @@
 package br.com.ricardo.firebasebasics;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -146,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
             limpaCampos();
 
+        } else if(id == R.id.menu_pesquisa){
+
+            Intent intent = new Intent(MainActivity.this, Pesquisa.class);
+            startActivity(intent);
         }
 
         return true;

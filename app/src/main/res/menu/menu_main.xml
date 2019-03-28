@@ -17,4 +17,9 @@
         android:icon="@drawable/ic_deleta"
         app:showAsAction="always"/>
 
+    <item android:id="@+id/menu_pesquisa"
+        android:title="Deletar"
+        android:icon="@drawable/ic_pesquisa"
+        app:showAsAction="always"/>
+
 </menu>
