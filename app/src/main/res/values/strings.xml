@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">firebase-basics</string>
+
+    <!-- Facebook SDK -->
+    <string name="facebook_app_id">264589214446629</string>
+    <string name="fb_login_protocol_scheme">fb264589214446629</string>
+
 </resources>

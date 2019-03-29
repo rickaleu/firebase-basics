@@ -10,6 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.LoginStatusCallback;
+import com.facebook.login.LoginBehavior;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -17,8 +21,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.security.AuthProvider;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Perfil extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -49,18 +59,30 @@ public class Perfil extends AppCompatActivity implements GoogleApiClient.OnConne
             @Override
             public void onClick(View v) {
 
-                //Desconectando o Firebase.
-                Conexao.logOut();
+                List<String> site = user.getProviders();
 
-                //Desconectando o auth.
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        Toast.makeText(Perfil.this, "Conta desconectada", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-
+                if(site.get(0).startsWith("google")){
+                    //Desconectando a conta Google.
+                    Conexao.logOut();
+                    Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            Toast.makeText(Perfil.this, "Conta Google desconectada", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+                } else if(site.get(0).startsWith("facebook")){
+                    //Desconectando a conta Facebook.
+                    Conexao.logOut();
+                    LoginManager.getInstance().logOut();
+                    Toast.makeText(Perfil.this, "Conta Facebook desconectada", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    //Desconectando da conta normal de email.
+                    Conexao.logOut();
+                    Toast.makeText(Perfil.this, "Conta de Email desconectada", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
@@ -83,7 +105,7 @@ public class Perfil extends AppCompatActivity implements GoogleApiClient.OnConne
 
     public void inicializaFirebase(){
 
-        //Inicializei a conexão com o Firebase.
+        //Inicializa a conexão com o Authentication do Firebase.
         auth = FirebaseAuth.getInstance();
 
         //Criei uma instancia do listener.
@@ -98,7 +120,7 @@ public class Perfil extends AppCompatActivity implements GoogleApiClient.OnConne
 
                     //Carregando os dados nos componentes.
                     textPerfilEmail.setText(user.getEmail());
-                    textPerfilId.setText(user.getUid());
+                    textPerfilId.setText(user.getDisplayName());
                     Glide.with(Perfil.this).load(user.getPhotoUrl()).into(image);
 
                 } else{
