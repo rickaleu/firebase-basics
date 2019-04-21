@@ -17,13 +17,13 @@
         android:ems="10"
         android:hint="Pesquisar"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_firebase_pesquisa"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_firebase_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_firebase_pesquisa"
+        android:id="@+id/recycler_firebase_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
